@@ -1,6 +1,5 @@
 import * as React from "react";
 
-import { VersionSwitcher } from "@/components/version-switcher";
 import {
   Sidebar,
   SidebarContent,
@@ -13,7 +12,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import Logo from "./logo";
+import Image from "next/image";
 
 // This is sample data.
 const data = {
@@ -39,13 +38,20 @@ const data = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
-      <SidebarHeader>
+      <SidebarHeader className="p-4 flex justify-center">
         {/* <VersionSwitcher
           versions={data.versions}
           defaultVersion={data.versions[0]}
         /> */}
         {/* <SearchForm /> */}
-        <Logo />
+        {/* <Logo /> */}
+        <Image
+          src="/promo-kuponi-2.png"
+          alt="logo"
+          className="object-fit"
+          width={250}
+          height={250}
+        />
       </SidebarHeader>
       <SidebarContent>
         {/* We create a SidebarGroup for each parent. */}

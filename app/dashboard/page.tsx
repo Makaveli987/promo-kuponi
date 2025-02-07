@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Loader from "@/components/ui/loader";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { usePromoCodeDialogStore } from "@/hooks/use-promo-code-dialog";
 import { PromoCode } from "@/models/PromoCode";
@@ -91,7 +92,7 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-3 gap-6">
-          {isLoading && <div>Loading...</div>}
+          {isLoading && <Loader />}
           {filteredPromoCodes.map((promoCode) => (
             <PromoCodeCard key={promoCode.id} promoCode={promoCode} />
           ))}

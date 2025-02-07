@@ -16,13 +16,15 @@ export const addPromoCode = async (promoCode: PromoCode) => {
     validUntil: promoCode.validUntil as string,
   });
 
-  revalidatePath("/");
+  revalidatePath("/dashboard");
+  return { success: true };
 };
 
 export const deletePromoCode = async (id: string) => {
   await db.delete(promoCodes).where(eq(promoCodes.id, id));
 
-  revalidatePath("/");
+  revalidatePath("/dashboard");
+  return { success: true };
 };
 
 export const editPromoCode = async (promoCode: PromoCode) => {
@@ -38,7 +40,8 @@ export const editPromoCode = async (promoCode: PromoCode) => {
     })
     .where(eq(promoCodes.id, promoCode.id as string));
 
-  revalidatePath("/");
+  revalidatePath("/dashboard");
+  return { success: true };
 };
 
 export const getPromoCodes = async (store?: string): Promise<PromoCode[]> => {

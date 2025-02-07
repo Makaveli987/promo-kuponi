@@ -2,47 +2,24 @@
 
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
-import { useCallback } from "react";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 
-export function CategoryCard({
-  icon,
-  store,
-}: {
-  icon: React.ReactNode;
-  store: string;
-}) {
+export function CategoryCard({ store }: { store: string }) {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set(name, value);
-
-      return params.toString();
-    },
-    [searchParams]
-  );
 
   return (
     <Link
-      href={pathname + "?" + createQueryString("prodavnica", store)}
+      href={`/prodavnice/${store}`}
       className={cn(
-        "flex flex-col items-center p-4 bg-white rounded-xl hover:shadow-lg transition-shadow cursor-pointer",
-        searchParams
-          ?.get("prodavnica")
-          ?.toLowerCase()
-          .includes(store.toLowerCase()) && "ring-2 ring-[#1BBC9B]"
+        "w-32 h-16 p-4 bg-white rounded-xl hover:shadow-lg transition-shadow cursor-pointer",
+        pathname?.includes(store) && "ring-2 ring-primary"
       )}
     >
-      {/* <div className="text-gray-700 mb-2">{icon}</div>
-      <span className="text-sm text-center">{store}</span> */}
       <Image
-        src={`/${store}.png`}
+        src={`/${store}-promo-kuponi.webp`}
         alt={store}
-        className="h-20 object-cover"
+        className="object-fit"
         width={"450"}
         height={"450"}
       />
