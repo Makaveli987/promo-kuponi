@@ -57,3 +57,10 @@ export const getPromoCodes = async (store?: string): Promise<PromoCode[]> => {
 
   return data;
 };
+
+export const login = (password: string) => {
+  if (password === process.env.LOGIN_PASS) {
+    return { success: true };
+  }
+  return { success: false, message: "Invalid password" };
+};

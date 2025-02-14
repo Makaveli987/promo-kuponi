@@ -1,8 +1,8 @@
 import React from "react";
-import { Button } from "./ui/button";
 import Image from "next/image";
 import { PromoCode } from "@/models/PromoCode";
 import { calculateDaysLeft } from "@/lib/utils";
+import CopyButton from "./ui/copy-button";
 
 type PromoCodeCardOSProps = {
   promoCode: PromoCode;
@@ -28,9 +28,7 @@ export default function PromoCodeCardOS({ promoCode }: PromoCodeCardOSProps) {
         <div className="mt-auto">
           <p className="text-lg text-red-600 text-center mb-2 ">25% Popust</p>
 
-          <Button className="w-full text-base bg-primary text-white py-2 rounded-lg hover:bg-dark-background transition-colors">
-            Sačuvaj kupon
-          </Button>
+          <CopyButton promoCode={promoCode.promoCode} />
           <div className="flex flex-col justify-center items-center mt-3 text-sm text-gray-500">
             <span className="font-semibold">
               Ponuda važi još {calculateDaysLeft(promoCode?.validUntil)} dana
