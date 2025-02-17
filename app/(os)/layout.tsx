@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import localFont from "next/font/local";
 import "../globals.css";
 import PageContainer from "@/components/page-container";
@@ -51,6 +52,7 @@ export default function RootLayout({
           <Header />
           {children}
         </PageContainer>
+        <Analytics />
       </body>
     </html>
   );

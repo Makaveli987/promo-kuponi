@@ -6,12 +6,24 @@ import Image from "next/image";
 import { usePromoCodeDialogStore } from "@/hooks/use-promo-code-dialog";
 import { PromoCode } from "@/models/PromoCode";
 import { deletePromoCode } from "@/actions/actions";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { useState } from "react";
 
 interface PromoCodeCardProps {
   promoCode: PromoCode;
+  getPromoCodes: () => void;
 }
 
-export default function PromoCodeCard({ promoCode }: PromoCodeCardProps) {
+export default function PromoCodeCard({
+  promoCode,
+  getPromoCodes,
+}: PromoCodeCardProps) {
+  const [popoverOpen, setPopoverOpen] = useState(false);
+
+  const handleDelete = async () => {
+    await deletePromoCode(promoCode.id as string).then(() => getPromoCodes());
+    setPopoverOpen(false);
+  };
   const openPromoCodeDialog = usePromoCodeDialogStore().openDialog;
 
   return (
@@ -34,7 +46,7 @@ export default function PromoCodeCard({ promoCode }: PromoCodeCardProps) {
                 {promoCode.storeName}
               </h3>
               <p className="text-xl font-bold text-primary mt-1">
-                {promoCode.discount}%
+                {promoCode.discount}
               </p>
               <div className="flex flex-col justify-between w-full mt-2">
                 <p className="text-xs text-muted-foreground ">
@@ -55,14 +67,25 @@ export default function PromoCodeCard({ promoCode }: PromoCodeCardProps) {
               >
                 <Edit2Icon className="h-3 w-3" />
               </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-7 w-7"
-                onClick={() => deletePromoCode(promoCode.id as string)}
-              >
-                <Trash2Icon className="h-3 w-3" />
-              </Button>
+              <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+                <PopoverTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-7 w-7">
+                    <Trash2Icon className="h-3 w-3" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-64 flex flex-col gap-3">
+                  <p className="text-sm ">
+                    Are you sure you want to delete this promo code?
+                  </p>
+                  <Button
+                    variant="destructive"
+                    className=""
+                    onClick={() => handleDelete()}
+                  >
+                    Delete
+                  </Button>
+                </PopoverContent>
+              </Popover>
             </div>
           </div>
         </div>

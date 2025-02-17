@@ -28,20 +28,19 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Calendar } from "./ui/calendar";
 import { useEffect } from "react";
 import { usePromoCodeDialogStore } from "@/hooks/use-promo-code-dialog";
-import { addPromoCode } from "@/actions/actions";
+import { addPromoCode, editPromoCode } from "@/actions/actions";
 
 const formSchema = z.object({
   storeName: z.string().min(2).max(50),
   websiteUrl: z.string().min(2).max(100),
   promoCode: z.string().min(2).max(20),
-  discount: z.string().min(1).max(2),
+  discount: z.string().min(1),
   description: z.string().max(50),
   validUntil: z.date(),
   usageCount: z.number(),
 });
 
 export function PromoCodeDialog() {
-  // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -50,6 +49,7 @@ export function PromoCodeDialog() {
       promoCode: "",
       discount: "",
       description: "",
+      validUntil: undefined,
       usageCount: 0,
     },
   });
@@ -57,17 +57,25 @@ export function PromoCodeDialog() {
   const promoCodeDialog = usePromoCodeDialogStore();
 
   useEffect(() => {
-    if (promoCodeDialog) {
-      console.log("edit");
+    if (promoCodeDialog.data?.id) {
+      form.setValue("storeName", promoCodeDialog.data.storeName);
+      form.setValue("websiteUrl", promoCodeDialog.data.websiteUrl);
+      form.setValue("promoCode", promoCodeDialog.data.promoCode);
+      form.setValue("discount", promoCodeDialog.data.discount);
+      form.setValue("description", promoCodeDialog.data.description || "");
+      form.setValue("validUntil", new Date(promoCodeDialog.data.validUntil));
+      form.setValue("usageCount", promoCodeDialog.data.usageCount);
+    } else {
+      form.reset();
     }
-  }, []);
+  }, [promoCodeDialog.data?.id]);
 
-  // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-    await addPromoCode(values);
+    if (promoCodeDialog.data?.id) {
+      await editPromoCode({ ...values, id: promoCodeDialog.data.id });
+    } else {
+      await addPromoCode(values);
+    }
 
     promoCodeDialog.closeDialog();
   }
@@ -176,7 +184,7 @@ export function PromoCodeDialog() {
                   <FormLabel className="w-28 whitespace-nowrap text-right">
                     Valid until
                   </FormLabel>
-                  <Popover>
+                  <Popover modal={true}>
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button

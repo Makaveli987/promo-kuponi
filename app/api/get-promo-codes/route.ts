@@ -8,8 +8,6 @@ export async function GET(req: { url: string | URL }) {
   const { searchParams } = new URL(req.url); // Extract query parameters
   const website = searchParams.get("website"); // Replace "param" with your query key
 
-  console.log("Query param :>> ", website);
-
   // Optionally filter data based on params
   let data = [];
   if (website) {
@@ -20,8 +18,6 @@ export async function GET(req: { url: string | URL }) {
   } else {
     data = await db.select().from(promoCodes);
   }
-
-  console.log("data :>> ", data);
 
   const response = NextResponse.json(data, { status: 200 });
   response.headers.set("Access-Control-Allow-Origin", "*");

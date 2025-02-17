@@ -17,58 +17,33 @@ import { Input } from "@/components/ui/input";
 import Loader from "@/components/ui/loader";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { usePromoCodeDialogStore } from "@/hooks/use-promo-code-dialog";
-import { PromoCode } from "@/models/PromoCode";
+import { usePromoCodes } from "@/hooks/use-promo-codes";
 import { Label } from "@radix-ui/react-label";
 import { Separator } from "@radix-ui/react-separator";
 import { PlusCircleIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useLocalStorage } from "usehooks-ts";
 
-export default function Home() {
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    localStorage.getItem("isLoggedIn") === "true"
-  );
-  const [promoCodes, setPromoCodes] = useState<PromoCode[]>([]);
-  const [filteredPromoCodes, setFilteredPromoCodes] = useState<PromoCode[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+export default function DashboardPage() {
+  const [isLoggedIn, setiIsLoggedIn] = useLocalStorage("isLoggedIn", "false");
+
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const { filteredPromoCodes, isLoading, getPromoCodes, handleSearch } =
+    usePromoCodes();
   const openPromoCodeDialog = usePromoCodeDialogStore().openDialog;
-
-  async function getData() {
-    const url = "http://localhost:3000/api/promo-codes";
-    try {
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
-      }
-
-      const json = await response.json();
-      setPromoCodes(json);
-      setFilteredPromoCodes(json);
-      setIsLoading(false);
-      console.log(json);
-    } catch (e: unknown) {
-      console.error("Error: ", e);
-    }
-  }
+  const dialogOpen = usePromoCodeDialogStore().isOpen;
 
   useEffect(() => {
-    setIsLoading(true);
-    getData();
-  }, [isLoggedIn]);
-
-  function handleSearch(value: string): void {
-    const filteredData = promoCodes.filter((item) =>
-      item.storeName.toLowerCase().includes(value.toLowerCase())
-    );
-    setFilteredPromoCodes(filteredData);
-  }
+    if (!dialogOpen && isLoggedIn) {
+      getPromoCodes();
+    }
+  }, [isLoggedIn, dialogOpen]);
 
   async function handleLogin() {
     const result = await login(password);
     if (result.success) {
-      setIsLoggedIn(true);
-      localStorage.setItem("isLoggedIn", "true");
+      setiIsLoggedIn("true");
     } else {
       setError(result.message || "Invalid password");
     }
@@ -119,7 +94,7 @@ export default function Home() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="#">Home</BreadcrumbLink>
+                <BreadcrumbLink href="/dashboard">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
@@ -147,7 +122,11 @@ export default function Home() {
           <div className="grid grid-cols-3 gap-6">
             {isLoading && <Loader />}
             {filteredPromoCodes.map((promoCode) => (
-              <PromoCodeCard key={promoCode.id} promoCode={promoCode} />
+              <PromoCodeCard
+                key={promoCode.id}
+                promoCode={promoCode}
+                getPromoCodes={getPromoCodes}
+              />
             ))}
           </div>
         </div>

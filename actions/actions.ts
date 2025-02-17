@@ -64,3 +64,24 @@ export const login = (password: string) => {
   }
   return { success: false, message: "Invalid password" };
 };
+
+export const incrementPromoCodeUsage = async (promoCode: string) => {
+  const currentPromoCode = await db
+    .select()
+    .from(promoCodes)
+    .where(eq(promoCodes.promoCode, promoCode));
+
+  if (!currentPromoCode[0]) {
+    return { success: false, message: "Promo code not found" };
+  }
+
+  await db
+    .update(promoCodes)
+    .set({
+      usageCount: (currentPromoCode[0].usageCount || 0) + 1,
+    })
+    .where(eq(promoCodes.promoCode, promoCode));
+
+  revalidatePath("/dashboard");
+  return { success: true };
+};

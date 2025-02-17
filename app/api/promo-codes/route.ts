@@ -5,7 +5,6 @@ import { NextResponse } from "next/server";
 // To handle a GET request to /api
 export async function GET() {
   const data = await db.select().from(promoCodes);
-  console.log("data :>> ", data);
 
   return NextResponse.json(data, { status: 200 });
 }
