@@ -25,7 +25,7 @@ import { useEffect, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 
 export default function DashboardPage() {
-  const [isLoggedIn, setiIsLoggedIn] = useLocalStorage("isLoggedIn", "false");
+  const [isLoggedIn, setiIsLoggedIn] = useLocalStorage("isLoggedIn", "");
 
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
