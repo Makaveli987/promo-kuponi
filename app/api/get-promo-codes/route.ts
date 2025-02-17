@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 // To handle a GET request to /api
-export async function GET(req: { url: string | URL }) {
+export async function GET(req: Request) {
   const { searchParams } = new URL(req.url); // Extract query parameters
   const website = searchParams.get("website"); // Replace "param" with your query key
 

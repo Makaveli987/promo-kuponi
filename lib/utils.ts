@@ -10,6 +10,8 @@ export function calculateDaysLeft(validUntil: string | Date): number {
   const firstDate = new Date(validUntil);
   const secondDate = new Date();
 
-  const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay));
+  const diffDays = Math.round(
+    Math.abs((firstDate.getTime() - secondDate.getTime()) / oneDay)
+  );
   return diffDays;
 }
