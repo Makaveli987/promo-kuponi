@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function calculateDaysLeft(validUntil: string | Date): number {
-  const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+  const oneDay = 24 * 60 * 60 * 1000;
   const firstDate = new Date(validUntil);
   const secondDate = new Date();
 
