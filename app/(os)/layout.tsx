@@ -17,11 +17,12 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Promo Kuponi | Uštedite uz najbolje kupone za popuste",
+  title:
+    "Promo Kuponi (Kodovi) | Uštedite uz najbolje kupone (kodove) za popuste",
   description:
     "Pronađite najbolje promo kodove i kupone za popuste. Uštedite pri kupovini u vodećim online prodavnicama kao što su Sinsay, Wolt, Shoppster i drugi.",
   keywords:
-    "promo kodovi, kuponi za popust, online kupovina, ušteda, popusti, online prodavnice",
+    "promo kodovi, kuponi za popust, online kupovina, ušteda, popusti, online prodavnice, promo kuponi",
   openGraph: {
     title: "Promo Kuponi | Uštedite uz najbolje kupone za popuste",
     description:

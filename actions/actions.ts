@@ -82,6 +82,5 @@ export const incrementPromoCodeUsage = async (promoCode: string) => {
     })
     .where(eq(promoCodes.promoCode, promoCode));
 
-  revalidatePath("/dashboard");
   return { success: true };
 };
